@@ -1,3 +1,6 @@
 /data
 /.venv
 /documentation
+/figures
+/tests
+*/__pycache__
