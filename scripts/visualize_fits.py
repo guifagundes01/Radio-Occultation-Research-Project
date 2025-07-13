@@ -116,7 +116,7 @@ def plot_example_fits(electron_density, altitude, chapman_params, is_good_fit, n
         ax.plot(altitude, yfit, 'r-', label='Fit')
         ax.set_title(f'Good Fit {i+1}')
         ax.set_xlabel('Altitude (km)')
-        ax.set_ylabel('Electron Density (m⁻³)')
+        ax.set_ylabel('Electron Density (cm⁻³)')
         ax.legend()
     
     # Plot bad fits
@@ -129,7 +129,7 @@ def plot_example_fits(electron_density, altitude, chapman_params, is_good_fit, n
         ax.plot(altitude, yfit, 'r-', label='Fit')
         ax.set_title(f'Bad Fit {i+1}')
         ax.set_xlabel('Altitude (km)')
-        ax.set_ylabel('Electron Density (m⁻³)')
+        ax.set_ylabel('Electron Density (cm⁻³)')
         ax.legend()
     
     plt.tight_layout()

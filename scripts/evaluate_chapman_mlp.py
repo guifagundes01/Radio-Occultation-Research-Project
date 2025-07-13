@@ -5,6 +5,7 @@ from model.chapman_mlp import ChapmanMLP, convert_seconds_to_datetime, circular_
 from sklearn.preprocessing import StandardScaler
 import h5py
 from analyze.functions import *
+from sklearn.model_selection import train_test_split
 
 def load_model_and_scalers(model_path):
     # Load the best model
@@ -161,7 +162,7 @@ def plot_predictions(model, X_scaler, y_scaler, electron_density, altitude, lati
                 verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
         
         ax.set_title(f'Best {i+1}\nError: {errors[idx]:.1f}%')
-        ax.set_xlabel('Electron Density (m⁻³)')
+        ax.set_xlabel('Electron Density (cm⁻³)')
         ax.set_ylabel('Altitude (km)')
         ax.legend()
         ax.grid(True)
@@ -188,14 +189,14 @@ def plot_predictions(model, X_scaler, y_scaler, electron_density, altitude, lati
                 verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
         
         ax.set_title(f'Worst {i+1}\nError: {errors[idx]:.1f}%')
-        ax.set_xlabel('Electron Density (m⁻³)')
+        ax.set_xlabel('Electron Density (cm⁻³)')
         ax.set_ylabel('Altitude (km)')
         ax.legend()
         ax.grid(True)
     
     plt.tight_layout()
-    plt.show()
     plt.savefig('./data/fit_results/circular_encoding/mlp_predictions_circular_encoding.png')
+    plt.show()
     plt.close()
 
 def plot_training_history(model_path):
@@ -258,9 +259,12 @@ def plot_prediction_statistics(model, X_scaler, y_scaler, electron_density, alti
         y_pred_scaled = model(X_tensor)
         y_pred = y_scaler.inverse_transform(y_pred_scaled.cpu().numpy())
     
-    # Load true parameters
+    # Load true parameters (already filtered for good fits and test set in main)
     with h5py.File("./data/filtered/electron_density_profiles_2023_with_fits.h5", 'r') as f:
-        true_params = f['fit_results/chapman_params'][:]
+        is_good_fit = f['fit_results/is_good_fit'][:]
+        # indices = np.arange(len(is_good_fit))
+        train_idx, test_idx = train_test_split(indices, test_size=0.2, random_state=42)
+        true_params = f['fit_results/chapman_params'][:][test_idx]
     
     # Calculate errors for each parameter
     param_names = ['Nmax', 'hmax', 'H', 'a1', 'Nm', 'a2', 'hm']
@@ -314,7 +318,32 @@ def main():
     model_path = './data/fit_results/circular_encoding/best_chapman_mlp.pth'
     
     # Load data from filtered file
-    electron_density, latitude, longitude, altitude, local_time, f107, kp, dip = load_data('./data/filtered/electron_density_profiles_2023_with_fits.h5')
+    with h5py.File('./data/filtered/electron_density_profiles_2023_with_fits.h5', 'r') as f:
+        # Get the good fit mask
+        is_good_fit = f['fit_results/is_good_fit'][:]
+        
+        # Load and filter data
+        electron_density = f['electron_density'][:]
+        latitude = f['latitude'][:]
+        longitude = f['longitude'][:]
+        altitude = f['altitude'][:]
+        local_time = f['local_time'][:]
+        f107 = f['f107'][:]
+        kp = f['kp'][:]
+        dip = f['dip'][:]
+        
+        # Get indices for train/test split (same as in training)
+        indices = np.arange(len(latitude))
+        train_idx, test_idx = train_test_split(indices, test_size=0.2, random_state=42)
+        
+        # Use only test set for evaluation
+        electron_density = electron_density[test_idx]
+        latitude = latitude[test_idx]
+        longitude = longitude[test_idx]
+        local_time = local_time[test_idx]
+        f107 = f107[test_idx]
+        kp = kp[test_idx]
+        dip = dip[test_idx]
     
     # Load model and scalers
     model, X_scaler, y_scaler = load_model_and_scalers(model_path)

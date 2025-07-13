@@ -198,7 +198,7 @@ def plot_profile_comparison(models, scalers, electron_density, altitude, feature
                 verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
         
         ax.set_title(f'{title_prefix}Sample {i+1}')
-        ax.set_xlabel('Electron Density (m⁻³)')
+        ax.set_xlabel('Electron Density (cm⁻³)')
         ax.set_ylabel('Altitude (km)')
         ax.set_xscale('log')  # Set x-axis to logarithmic scale
         ax.legend()

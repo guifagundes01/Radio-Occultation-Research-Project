@@ -55,7 +55,7 @@ def plot_worst_fits(electron_density, altitude, chapman_params, errors, n_worst=
         ax.plot(fitted_curve, altitude, 'r-', label='Fitted curve')
         
         ax.set_title(f'Profile {idx} - MSE: {errors[idx]:.2e}')
-        ax.set_xlabel('Electron Density (m⁻³)')
+        ax.set_xlabel('Electron Density (cm⁻³)')
         ax.set_ylabel('Altitude (km)')
         ax.legend()
         ax.grid(True)

@@ -169,7 +169,7 @@ def plot_worst_fits(n_worst=5):
         ax.plot(y_epstein, altitude, 'g--', label='Epstein fit')
         
         ax.set_title(f'Profile {idx} - MSE: {chapman_errors[idx]:.2e}')
-        ax.set_xlabel('Electron Density (m⁻³)')
+        ax.set_xlabel('Electron Density (cm⁻³)')
         ax.set_ylabel('Altitude (km)')
         ax.legend()
         ax.grid(True)
@@ -199,7 +199,7 @@ def plot_worst_fits(n_worst=5):
         ax.plot(y_chapman, altitude, 'r--', label='Chapman fit')
         
         ax.set_title(f'Profile {idx} - MSE: {epstein_errors[idx]:.2e}')
-        ax.set_xlabel('Electron Density (m⁻³)')
+        ax.set_xlabel('Electron Density (cm⁻³)')
         ax.set_ylabel('Altitude (km)')
         ax.legend()
         ax.grid(True)

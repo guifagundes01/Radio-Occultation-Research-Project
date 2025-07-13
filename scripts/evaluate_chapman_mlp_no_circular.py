@@ -154,7 +154,7 @@ def plot_predictions(model, X_scaler, y_scaler, electron_density, altitude, lati
                 verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
         
         ax.set_title(f'Best {i+1}\nError: {errors[idx]:.1f}%')
-        ax.set_xlabel('Electron Density (m⁻³)')
+        ax.set_xlabel('Electron Density (cm⁻³)')
         ax.set_ylabel('Altitude (km)')
         ax.legend()
         ax.grid(True)
@@ -181,7 +181,7 @@ def plot_predictions(model, X_scaler, y_scaler, electron_density, altitude, lati
                 verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
         
         ax.set_title(f'Worst {i+1}\nError: {errors[idx]:.1f}%')
-        ax.set_xlabel('Electron Density (m⁻³)')
+        ax.set_xlabel('Electron Density (cm⁻³)')
         ax.set_ylabel('Altitude (km)')
         ax.legend()
         ax.grid(True)
