@@ -84,6 +84,14 @@ def chapmanF2F1(h, Nmax2, hmax2, H, alpha2, Nmax1, alpha1, hmax1):
     
     return profile
 
+def chapmanF2F1_torch(x, Nmax, hmax, H, a1, Nm, a2, hm):
+    """Chapman function for F2 and F1 layers (PyTorch version)"""
+    z = (x - hmax) / H
+    zf1 = (x - hm) / H
+    F2 = Nmax * torch.exp(1 - z - torch.exp(-z))
+    F1 = Nm * torch.exp(1 - zf1 - torch.exp(-zf1))
+    return F2 + a1 * F1
+
 def generate_chapman_profiles(params, altitude):
     """
     Generate Chapman profiles from parameters with improved stability
